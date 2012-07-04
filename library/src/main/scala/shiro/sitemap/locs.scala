@@ -1,12 +1,24 @@
 package shiro.sitemap
 
-import net.liftweb.http.S
-import shiro.{Shiro,LoginRedirect}
+import net.liftweb.http.{ S, Factory }
+import shiro.{ Shiro, LoginRedirect, UrlConfig }
 
 /**
  * Lift SiteMap Integration
  */
-object Locs {
+import net.liftweb.sitemap.Loc.{If,EarlyResponse,DispatchLocSnippets}
+object DefaultLogin
+    extends DispatchLocSnippets 
+    with shiro.snippet.DefaultUsernamePasswordLogin { 
+    def dispatch = { 
+      case "login" => render 
+    }
+  }
+
+class Locs( config:UrlConfig ) {
+
+  private val injectConfig = config
+
   import net.liftweb.common.Full
   import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
   import net.liftweb.sitemap.{Menu,Loc}
@@ -15,9 +27,13 @@ object Locs {
   
   implicit def listToPath(in: List[String]): String = in.mkString("/","/","")
   
-  private val loginURL = Shiro.baseURL.vend ::: Shiro.loginURL.vend
-  private val indexURL = Shiro.baseURL.vend ::: Shiro.indexURL.vend
-  private val logoutURL = Shiro.baseURL.vend ::: Shiro.logoutURL.vend
+  //private val loginURL = Shiro.baseURL.vend ::: Shiro.loginURL.vend
+  //private val indexURL = Shiro.baseURL.vend ::: Shiro.indexURL.vend
+  //private val logoutURL = Shiro.baseURL.vend ::: Shiro.logoutURL.vend
+
+  private val loginURL = injectConfig.baseURL.vend ::: injectConfig.loginURL.vend
+  private val indexURL = injectConfig.baseURL.vend ::: injectConfig.indexURL.vend
+  private val logoutURL = injectConfig.baseURL.vend ::: injectConfig.logoutURL.vend
   
   def RedirectBackToReferrer = {
     val uri = S.uriAndQueryString
@@ -51,16 +67,8 @@ object Locs {
   private val logoutLocParams = RequireRemembered :: 
     EarlyResponse(() => {
         if(isAuthenticatedOrRemembered){ subject.logout() }
-      Full(RedirectResponse(Shiro.indexURL.vend))
+      Full(RedirectResponse(injectConfig.indexURL.vend))
     }) :: Nil
-  
-  object DefaultLogin
-    extends DispatchLocSnippets 
-    with shiro.snippet.DefaultUsernamePasswordLogin { 
-    def dispatch = { 
-      case "login" => render 
-    }
-  }
   
   def HasRole(role: String) = 
     If(() => hasRole(role), 

@@ -9,7 +9,22 @@ import org.apache.shiro.util.{Factory => ShiroFactory}
 import org.apache.shiro.config.IniSecurityManagerFactory
 import org.apache.shiro.mgt.SecurityManager
 
-object Shiro extends Factory {
+trait UrlConfig extends Factory {
+  type Path = List[String]
+  val indexURL = new FactoryMaker[Path](Nil){}
+  val baseURL = new FactoryMaker[Path](Nil){}
+  val loginURL = new FactoryMaker[Path]("login" :: Nil){}
+  val logoutURL = new FactoryMaker[Path]("logout" :: Nil){}
+}
+
+class Shiro( config:UrlConfig ) extends Factory {
+
+  import net.liftweb.sitemap.Menu
+  import shiro.sitemap.Locs
+  
+  val pathConfig:UrlConfig = config
+  val locs = new Locs( pathConfig )
+
   def init(factory: ShiroFactory[SecurityManager]){
     
     import Utils._
@@ -39,20 +54,9 @@ object Shiro extends Factory {
   /** 
    * Speedy setup helpers
    */
-  import net.liftweb.sitemap.Menu
-  import shiro.sitemap.Locs
   
   def menus: List[Menu] = sitemap
-  private lazy val sitemap = List(Locs.logoutMenu)
-  
-  /** 
-   * Configurations
-   */
-  type Path = List[String]
-  val indexURL = new FactoryMaker[Path](Nil){}
-  val baseURL = new FactoryMaker[Path](Nil){}
-  val loginURL = new FactoryMaker[Path]("login" :: Nil){}
-  val logoutURL = new FactoryMaker[Path]("logout" :: Nil){}
+  private lazy val sitemap = List(locs.logoutMenu)
 }
 
 object LoginRedirect extends SessionVar[Box[String]](Empty){
