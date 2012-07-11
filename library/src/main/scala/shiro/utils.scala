@@ -3,7 +3,7 @@ package shiro
 object Utils extends Utils
 private[shiro] trait Utils {
   import org.apache.shiro.SecurityUtils
-  import org.apache.shiro.subject.Subject
+  import org.apache.shiro.subject.{ Subject, PrincipalCollection, SimplePrincipalCollection }
   import net.liftweb.common.Box
   
   implicit def subject = SecurityUtils.getSubject
@@ -24,8 +24,9 @@ private[shiro] trait Utils {
     isAuthenticated || isRemembered
   }
   
-  def hasRole(role: String) = 
+  def hasRole(role: String) = {
     test { _.hasRole(role) }
+  }
   
   def lacksRole(role: String) = 
     !hasRole(role)
@@ -41,6 +42,9 @@ private[shiro] trait Utils {
     
   def hasAllRoles(roles: Seq[String]) = 
     roles forall(r => hasRole(r.trim))
+
+  def isRunAs(roles: Seq[String]) = 
+    hasAnyRoles(roles) && test { _.isRunAs }
 }
 
 import net.liftweb.common.{Box,Failure,Full}

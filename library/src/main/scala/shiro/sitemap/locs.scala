@@ -89,4 +89,8 @@ class Locs( config:UrlConfig ) {
   def HasAnyRoles(roles: Seq[String]) = 
     If(() => hasAnyRoles(roles),
        DisplayError("You are the wrong role to access that resource."))
+
+  def IsRunAs(roles: Seq[String]) = 
+    If(() => isRunAs(roles), 
+      DisplayError("You need to take the role of another user to access that resource."))
 }
