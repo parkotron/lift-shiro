@@ -11,7 +11,7 @@ class Boot {
 
     object conf extends UrlConfig {
       override val baseURL = new FactoryMaker[Path](Nil){}
-      override val loginURL = new FactoryMaker[Path](Nil){}
+      override val loginURL = new FactoryMaker[Path]("login" :: Nil){}
     }
 
     val shiro = new Shiro( conf )

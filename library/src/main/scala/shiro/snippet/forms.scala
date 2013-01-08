@@ -10,6 +10,6 @@ trait DefaultUsernamePasswordLogin extends DispatchSnippet with shiro.SubjectLif
     "type=text" #> SHtml.text(username, username = _) &
     "type=password" #> SHtml.password(password, password = _) &
     "type=submit" #> SHtml.submit("Login", () => 
-      login(new UsernamePasswordToken(username, password)))
+      login(new UsernamePasswordToken(username, password, true)))
   }
 }

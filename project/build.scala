@@ -2,7 +2,7 @@ import sbt._, Keys._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
-  val buildVersion      = "0.0.6.5-SNAPSHOT"
+  val buildVersion      = "0.0.6.6-SNAPSHOT"
   val buildScalaVersion = "2.9.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
@@ -64,8 +64,8 @@ object LiftShiroBuild extends Build {
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
         "net.liftweb" %% "lift-webkit" % "2.4" % "compile",
-        "org.apache.shiro" % "shiro-core" % "1.1.0",
-        "org.apache.shiro" % "shiro-web" % "1.1.0",
+        "org.apache.shiro" % "shiro-core" % "1.2.1",
+        "org.apache.shiro" % "shiro-web" % "1.2.1",
         "commons-beanutils" % "commons-beanutils" % "20030211.134440"
       )
     )
