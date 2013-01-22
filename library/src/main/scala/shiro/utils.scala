@@ -57,10 +57,11 @@ import org.apache.shiro.authc.{
 trait SubjectLifeCycle {
   import Utils._
   
+  def redirect = S.redirectTo(LoginRedirect.is.openOr("/"))
+  
   protected def logout() = subject.logout
   
   protected def login[T <: AuthenticationToken](token: T){
-    def redirect = S.redirectTo(LoginRedirect.is.openOr("/"))
     if(!isAuthenticated){
       
       Helpers.tryo(subject.login(token)) match {
