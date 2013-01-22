@@ -62,7 +62,7 @@ class Locs( config:UrlConfig ) {
     () => RedirectToIndexURL)
   
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
-    S.??("logout"), logoutLocParams))
+    S.?("logout"), logoutLocParams))
   
   private val logoutLocParams = RequireRemembered :: 
     EarlyResponse(() => {
