@@ -76,9 +76,15 @@ object IsAuthenticated extends SubjectSnippet {
   }
 }
 
+object HasValidSession extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
+    isAuthenticatedOrRemembered
+  }
+}
+
 object IsNotAuthenticated extends SubjectSnippet {
   def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
-    !isAuthenticated
+    !isAuthenticatedOrRemembered
   }
 }
 

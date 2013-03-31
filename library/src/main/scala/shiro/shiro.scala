@@ -43,6 +43,7 @@ class Shiro( config:UrlConfig ) extends Factory {
       case "is_guest" | "isGuest" | "IsGuest" => IsGuest
       case "is_user" | "isUser" | "IsUser" => IsUser
       case "is_authenticated" | "isAuthenticated" | "IsAuthenticated" => IsAuthenticated
+      case "HasValidSession" => HasValidSession
       case "is_not_authenticated" | "isNotAuthenticated" | "IsNotAuthenticated" => IsNotAuthenticated
     }
   }
